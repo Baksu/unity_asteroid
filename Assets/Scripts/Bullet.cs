@@ -1,40 +1,71 @@
 ﻿using Cysharp.Threading.Tasks;
+using DefaultNamespace.Interfaces;
+using Managers.Interfaces;
 using UnityEngine;
 
-namespace DefaultNamespace
+public class Bullet : MonoBehaviour, IPoolObject
 {
-	public class Bullet : MonoBehaviour
+	//TODO: move to scriptable object
+	public float bulletSpeed = 40f;
+	public int bulletLifeTimeInMS;
+		
+	private IMovement _movement;
+	private IPoolManager<Bullet> _pool;
+		
+	public void Init(Vector2 startPosition, Vector2 direction, IPoolManager<Bullet> pool)
 	{
-		//TODO: move to scriptable object
-		public float bulletSpeed = 50f;
-		public int bulletLifeTimeInMS;
-		
-		private Vector2 _direction;
-		
-		public void Init(Vector2 direction)
-		{
-			_direction = direction;
-			CountLifeTime().Forget();
-		}
+		_pool = pool;
+		transform.position = startPosition;
+		SetMovement(direction);
+		CountLifeTime().Forget();
+	}
 
-		private void FixedUpdate()
+	private void FixedUpdate()
+	{
+		if (_movement != null)
 		{
-			Move();
+			_movement.Move();
 		}
+	}
 
-		//todo: think if need to use rigidbody to move? Probably yes to not have glitches during moving
-		private void Move()
+	private void OnCollisionEnter2D(Collision2D other)
+	{
+		if (other.gameObject.TryGetComponent<IDestructible>(out var hitObject))
 		{
-			Vector2 transformPosition = transform.position;
-			transformPosition += _direction * bulletSpeed;
-			transform.position = transformPosition;
+			Hit(hitObject);
 		}
+	}
+	
+	private void Hit(IDestructible other)
+	{
+		other.Destroyed();
+	}
 
-		private async UniTaskVoid CountLifeTime()
-		{
-			gameObject.GetCancellationTokenOnDestroy();
-			await UniTask.Delay(bulletLifeTimeInMS);
-			Destroy(gameObject); //TODO: hide and return to the bullet object pool. Remember to add flag in update checking if is spawn
-		}
+	private async UniTaskVoid CountLifeTime()
+	{
+		gameObject.GetCancellationTokenOnDestroy();
+		await UniTask.Delay(bulletLifeTimeInMS);
+		ReturnToPool();
+	}
+	
+	private void SetMovement(Vector2 direction)
+	{
+		_movement = new SimpleMovement();
+		_movement.Init(transform, direction, bulletSpeed);
+	}
+
+	private void ReturnToPool()
+	{
+		_pool.ReleaseObject(this);
+	}
+	
+	public void AfterGet()
+	{
+		gameObject.SetActive(true);
+	}
+
+	public void BeforeRelease()
+	{
+		gameObject.SetActive(false);
 	}
 }

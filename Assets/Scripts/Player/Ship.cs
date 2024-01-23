@@ -1,36 +1,30 @@
-using System;
 using Cysharp.Threading.Tasks;
-using DefaultNamespace;
+using Data;
+using Managers.Interfaces;
+using Player.Interface;
 using UnityEngine;
 
 namespace Player
 {
-    public class Ship : MonoBehaviour
+    public class Ship : MonoBehaviour, IPlayer
     {
         [SerializeField] private Rigidbody2D _rig;
         [SerializeField] private Transform _bulletSpawnPoint;
-
-        //TODO: create pool object for bullet and inject them to ship and enemy
-        public GameObject bulletPrefab;
         
-        
-        //TODO: move to the scriptable object
-        public float rotationSpeed = 5f;
-        public float thrust = 3f;
-        public float friction = 0.3f;
-        public float minimumVelocityToMove = 0.2f;
-        public int delayBetweenShotsInMS = 1000;
-
         private bool _isFiring;
+
+        private PlayerData _playerData;
+        private IPoolManager<Bullet> _bulletsPool;
         
-        public void Init()
+        public void Init(PlayerData playerData, IPoolManager<Bullet> bulletsManager)
         {
-            
+            _playerData = playerData;
+            _bulletsPool = bulletsManager;
         }
 
-        private void Update()
+        private void Update() 
         {
-            if (Input.GetKeyDown(KeyCode.Space) && !_isFiring)
+            if (Input.GetKeyDown(KeyCode.Space) && !_isFiring) //TODO: add command design patter for inputs
             {
                 _isFiring = true;
                 Fire().Forget();
@@ -38,7 +32,7 @@ namespace Player
 
             if (Input.GetKeyUp(KeyCode.Space))
             {
-                   _isFiring = false;
+                _isFiring = false;
             }
         }
 
@@ -65,19 +59,19 @@ namespace Player
         private void Rotate(bool rightDirection)
         {
             float direction = rightDirection ? -1 : 1;
-            _rig.rotation += direction * rotationSpeed;
+            _rig.rotation += direction * _playerData.RotationSpeed;
         }
 
         private void Accelerate()
         {
-            _rig.AddForce(transform.up * thrust);
+            _rig.AddForce(transform.up * _playerData.Thrust);
         }
 
         private void Friction()
         {
-            if (_rig.velocity.magnitude >= minimumVelocityToMove) //If ship is moving add friction
+            if (_rig.velocity.magnitude >= _playerData.MinimumVelocityToMove) //If ship is moving add friction
             {
-                _rig.AddForce(-1 * friction * _rig.velocity);
+                _rig.AddForce(-1 * _playerData.Friction * _rig.velocity);
             }
             else if (_rig.velocity.magnitude > 0.0f)
             {
@@ -89,11 +83,10 @@ namespace Player
         {
             while (_isFiring)
             {
-                var bullet = Instantiate(bulletPrefab, _bulletSpawnPoint.position, Quaternion.identity).GetComponent<Bullet>();
-                bullet.Init(transform.up);
-                await UniTask.Delay(delayBetweenShotsInMS); //TODO add two cancelation token for destroy and for stop fire
+                var bullet = _bulletsPool.GetObject();
+                bullet.Init(_bulletSpawnPoint.position, transform.up, _bulletsPool);
+                await UniTask.Delay(_playerData.DelayBetweenShotsInMS); //TODO add two cancelation token for destroy and for stop fire
             }
         }
     }
-
 }
