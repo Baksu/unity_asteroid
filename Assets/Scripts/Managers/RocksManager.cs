@@ -42,7 +42,7 @@ namespace Managers
 			var rock = Object.Instantiate(levelData.Prefab, spawnPosition, Quaternion.identity).GetComponent<Rock>();
 			if (rock != null)
 			{
-				rock.Init(levelData, _mainCamera, OnRockDestroy);
+				rock.Init(levelData, OnRockDestroy);
 				_allRocksOnLevel++;
 			}
 		}

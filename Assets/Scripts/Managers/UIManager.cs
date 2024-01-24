@@ -8,7 +8,7 @@ namespace Managers
 		public event Action<int> UpdatePointsAction;
 		public event Action<int> UpdateLivesAction;
 		public event Action IdleAction;
-		public event Action StartGameAction;
+		public event Action OnStartGameAction;
 		
 		public void Idle()
 		{
@@ -17,7 +17,7 @@ namespace Managers
 		
 		public void StartGame()
 		{ 
-			StartGameAction?.Invoke();
+			OnStartGameAction?.Invoke();
 		}
 
 		public void UpdatePoints(int points)

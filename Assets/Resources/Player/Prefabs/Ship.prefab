@@ -165,7 +165,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _rig: {fileID: 2188859573807517329}
+  _collider: {fileID: 2034979458184547242}
+  _spriteRenderer: {fileID: 3897817123735197318}
   _bulletSpawnPoint: {fileID: 4377582873692250774}
+  _indestructibleColor: {r: 0.7358709, g: 1, b: 0.3915094, a: 0.5019608}
+  _destructibleColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!50 &2188859573807517329
 Rigidbody2D:
   serializedVersion: 4

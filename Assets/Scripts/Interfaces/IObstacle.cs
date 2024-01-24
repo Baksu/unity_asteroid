@@ -1,7 +1,7 @@
-﻿namespace DefaultNamespace.Interfaces
+﻿namespace Interfaces
 {
 	public interface IObstacle
 	{
-		
+		public void Destroyed();
 	}
 }

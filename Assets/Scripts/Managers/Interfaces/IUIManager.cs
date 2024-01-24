@@ -8,7 +8,7 @@ namespace Managers.Interfaces
 		public event Action<int> UpdateLivesAction;
 
 		public event Action IdleAction;
-		public event Action StartGameAction;
+		public event Action OnStartGameAction;
 
 		public void Idle();
 		public void StartGame();

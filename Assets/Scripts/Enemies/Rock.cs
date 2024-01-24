@@ -1,6 +1,7 @@
 ﻿using System;
 using Data;
 using DefaultNamespace.Interfaces;
+using Interfaces;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -8,11 +9,8 @@ namespace Enemies
 {
 	public class Rock : MonoBehaviour, IObstacle, IDestructible
 	{
-		private Camera _mainCamera;
 		private IMovement _movement;
-		
 		private RockLevelData _levelData;
-
 		private Action<RockLevelData, Vector2> _onRockDestroy;
 		
 		private void FixedUpdate()
@@ -23,10 +21,9 @@ namespace Enemies
 			}
 		}
 
-		public void Init(RockLevelData levelData, Camera mainCamera, Action<RockLevelData, Vector2> onRockDestroy)
+		public void Init(RockLevelData levelData, Action<RockLevelData, Vector2> onRockDestroy)
 		{
 			_levelData = levelData;
-			_mainCamera = mainCamera;
 			_onRockDestroy = onRockDestroy;
 			SetMovement();
 		}

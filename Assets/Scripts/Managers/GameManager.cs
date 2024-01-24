@@ -37,13 +37,15 @@ namespace Managers
 			_rocksManager = rocksManager;
 			_scoreManager = scoreManager;
 
-			_uiManager.StartGameAction += StartGame;
+			_uiManager.OnStartGameAction += StartGame;
+			_playerManager.OnPlayerDestroyedAction += OnPlayerDestroyed;
 			_rocksManager.OnRocksEndsAction += NextLevel;
 		}
 		
 		public void Dispose()
 		{
-			_uiManager.StartGameAction -= StartGame;
+			_uiManager.OnStartGameAction -= StartGame;
+			_playerManager.OnPlayerDestroyedAction -= OnPlayerDestroyed;
 			_rocksManager.OnRocksEndsAction -= NextLevel;
 		}
 		
@@ -70,6 +72,22 @@ namespace Managers
 		{
 			_currentLevel++;
 			_rocksManager.SpawnRocksForLevel(_currentLevel);
+		}
+
+		private void OnPlayerDestroyed()
+		{
+			CurrentLives--;
+			if (CurrentLives <= 0)
+			{
+				GameOver();
+				return;
+			}
+			_playerManager.SpawnPlayer();
+		}
+
+		private void GameOver()
+		{
+			
 		}
 	}
 }

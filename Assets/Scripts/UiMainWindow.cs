@@ -33,7 +33,7 @@ namespace DefaultNamespace
 			_uiManager.UpdatePointsAction += UpdatePoints;
 			_uiManager.UpdateLivesAction += UpdateLives;
 			_uiManager.IdleAction += IdleGame;
-			_uiManager.StartGameAction += GameStarted;
+			_uiManager.OnStartGameAction += GameStarted;
 		}
 
 		private void OnDestroy() 
@@ -41,7 +41,7 @@ namespace DefaultNamespace
 			_uiManager.UpdatePointsAction -= UpdatePoints;
 			_uiManager.UpdateLivesAction -= UpdateLives;
 			_uiManager.IdleAction -= IdleGame;
-			_uiManager.StartGameAction -= GameStarted;
+			_uiManager.OnStartGameAction -= GameStarted;
 		}
 
 		private void UpdatePoints(int currentPoints)

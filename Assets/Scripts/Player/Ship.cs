@@ -1,4 +1,7 @@
+using System;
+using Cysharp.Threading.Tasks;
 using Data;
+using Interfaces;
 using Managers.Interfaces;
 using Player.Interface;
 using UnityEngine;
@@ -8,15 +11,33 @@ namespace Player
     public class Ship : MonoBehaviour, IPlayer
     {
         [SerializeField] private Rigidbody2D _rig;
+        [SerializeField] private Collider2D _collider;
+        [SerializeField] private SpriteRenderer _spriteRenderer;
         [SerializeField] private Transform _bulletSpawnPoint;
+
+        [SerializeField] private Color _indestructibleColor;
+        [SerializeField] private Color _destructibleColor;
         
         private PlayerData _playerData;
         private IPoolManager<Bullet> _bulletsPool;
+        private Action _onPlayerDestroyed;
+        private bool _isHit;
         
-        public void Init(PlayerData playerData, IPoolManager<Bullet> bulletsManager)
+        public void Init(PlayerData playerData, IPoolManager<Bullet> bulletsManager, Action onPlayerDestroyed)
         {
             _playerData = playerData;
             _bulletsPool = bulletsManager;
+            _onPlayerDestroyed = onPlayerDestroyed;
+            ShortIndestructible().Forget();
+        }
+        
+        private async UniTaskVoid ShortIndestructible()
+        {
+            _collider.enabled = false;
+            _spriteRenderer.color = _indestructibleColor;
+            await UniTask.Delay(_playerData.IndestructibleAfterSpawnInMS);
+            _spriteRenderer.color = _destructibleColor;
+            _collider.enabled = true;
         }
 
         private void Update() 
@@ -45,6 +66,31 @@ namespace Player
             }
             
             Friction();
+        }
+
+        private void OnDestroy()
+        {
+            _onPlayerDestroyed?.Invoke();
+        }
+
+        private void OnTriggerEnter2D(Collider2D other)
+        {
+            TryHit(other.gameObject);
+        }
+
+        private void OnCollisionEnter2D(Collision2D other)
+        {
+            TryHit(other.gameObject);
+        }
+
+        private void TryHit(GameObject other)
+        {
+            if (!_isHit && other.gameObject.TryGetComponent<IObstacle>(out var hitObject))
+            {
+                _isHit = true;
+                hitObject.Destroyed();
+                Destroy(gameObject);
+            }
         }
 
         private void Rotate(bool rightDirection)
