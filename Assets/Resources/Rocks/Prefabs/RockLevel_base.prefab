@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8240856214074792338}
   - component: {fileID: 6574376641370874599}
   - component: {fileID: 2372679862995422910}
-  - component: {fileID: 5187602521287461714}
+  - component: {fileID: 609148282098073886}
   m_Layer: 0
   m_Name: RockLevel_base
   m_TagString: Untagged
@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 3625043607559282579, guid: 19fb86013d8c24d6cb8410c0aadf30fa, type: 3}
+  m_Sprite: {fileID: 2747690628134850419, guid: b670ab75dde984907b8570040daa08c5, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -99,8 +99,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45aedad77b86851478eb1f0b97f95797, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _toRemove: {fileID: 11400000, guid: 9e2b7b00b3695d54980a50142f0d3a51, type: 2}
-  currentLevel: 1
 --- !u!114 &2372679862995422910
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -113,7 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a656f52a31554854a9e57d5f20a2a9db, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!60 &5187602521287461714
+--- !u!60 &609148282098073886
 PolygonCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -149,7 +147,7 @@ PolygonCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 0.5}
+    oldSize: {x: 1, y: 0.8828125}
     newSize: {x: 1, y: 0.5}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -157,8 +155,10 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0, y: 0.25}
+    - - {x: -0.25, y: 0.43359375}
       - {x: -0.5, y: 0}
-      - {x: 0, y: -0.25}
+      - {x: -0.25, y: -0.43359375}
+      - {x: 0.25, y: -0.43359375}
       - {x: 0.5, y: 0}
+      - {x: 0.25, y: 0.43359375}
   m_UseDelaunayMesh: 0

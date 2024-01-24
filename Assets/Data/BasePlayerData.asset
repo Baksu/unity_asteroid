@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _playerShipPrefab: {fileID: 5628920103726498032, guid: 29ab9a35e0fcb204c84a66a317c196cb, type: 3}
   _rotationSpeed: 5
-  _thrust: 9
+  _thrust: 10
   _friction: 0.5
   _minimumVelocityToMove: 0.2
   _delayBetweenShotsInMS: 1000

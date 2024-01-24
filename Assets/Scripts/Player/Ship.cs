@@ -1,4 +1,3 @@
-using Cysharp.Threading.Tasks;
 using Data;
 using Managers.Interfaces;
 using Player.Interface;
@@ -11,8 +10,6 @@ namespace Player
         [SerializeField] private Rigidbody2D _rig;
         [SerializeField] private Transform _bulletSpawnPoint;
         
-        private bool _isFiring;
-
         private PlayerData _playerData;
         private IPoolManager<Bullet> _bulletsPool;
         
@@ -24,15 +21,9 @@ namespace Player
 
         private void Update() 
         {
-            if (Input.GetKeyDown(KeyCode.Space) && !_isFiring) //TODO: add command design patter for inputs
+            if (Input.GetKeyDown(KeyCode.Space)) //TODO: add command design pattern for inputs. It helps when for example game has a settings when a player can change key configuration
             {
-                _isFiring = true;
-                Fire().Forget();
-            }
-
-            if (Input.GetKeyUp(KeyCode.Space))
-            {
-                _isFiring = false;
+                Fire();
             }
         }
 
@@ -79,14 +70,10 @@ namespace Player
             }
         }
         
-        private async UniTaskVoid Fire()
+        private void Fire()
         {
-            while (_isFiring)
-            {
-                var bullet = _bulletsPool.GetObject();
-                bullet.Init(_bulletSpawnPoint.position, transform.up, _bulletsPool);
-                await UniTask.Delay(_playerData.DelayBetweenShotsInMS); //TODO add two cancelation token for destroy and for stop fire
-            }
+            var bullet = _bulletsPool.GetObject();
+            bullet.Init(_bulletSpawnPoint.position, transform.up, _bulletsPool);
         }
     }
 }

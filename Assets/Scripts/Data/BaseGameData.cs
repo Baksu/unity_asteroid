@@ -9,9 +9,9 @@ namespace Data
 	{
 		[SerializeField] private int _startLives;
 		[SerializeField] private GameObject _baseBullet;
+		
 
 		public int StartLives => _startLives;
 		public GameObject BaseBullet => _baseBullet;
-
 	}
 }

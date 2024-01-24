@@ -1,4 +1,4 @@
-﻿using System.Linq;
+﻿using System;
 using Data;
 using DefaultNamespace.Interfaces;
 using UnityEngine;
@@ -6,22 +6,15 @@ using Random = UnityEngine.Random;
 
 namespace Enemies
 {
-	public class Rock : MonoBehaviour, IObstacle
+	public class Rock : MonoBehaviour, IObstacle, IDestructible
 	{
-		public RockData _toRemove;//TODO to remove
-		public int currentLevel; //TODO to remove
-		
 		private Camera _mainCamera;
 		private IMovement _movement;
-
-		private RockLevelData _currentLevel => _toRemove.Levels.First();
 		
-		private void Start()
-		{
-			_mainCamera = Camera.main;
-			Init();
-		}
+		private RockLevelData _levelData;
 
+		private Action<RockLevelData, Vector2> _onRockDestroy;
+		
 		private void FixedUpdate()
 		{
 			if (_movement != null)
@@ -30,36 +23,26 @@ namespace Enemies
 			}
 		}
 
-		private void Init()
+		public void Init(RockLevelData levelData, Camera mainCamera, Action<RockLevelData, Vector2> onRockDestroy)
 		{
-			SetStartPosition();
+			_levelData = levelData;
+			_mainCamera = mainCamera;
+			_onRockDestroy = onRockDestroy;
 			SetMovement();
-		}
-
-		private void SetStartPosition()
-		{
-			var randomSpawnSide = Random.Range(0, 2);
-
-			Vector3 startViewportPosition;
-			
-			if (randomSpawnSide == 0) //left-right
-			{
-				startViewportPosition = new Vector3(Random.Range(0, 2), Random.Range(0.0f, 1.0f), _mainCamera.nearClipPlane);
-			}
-			else //top-down
-			{
-				startViewportPosition = new Vector3(Random.Range(0.0f, 1.0f), Random.Range(0, 2), _mainCamera.nearClipPlane);
-			}
-			
-			transform.position = _mainCamera.ViewportToWorldPoint(startViewportPosition);
 		}
 
 		private void SetMovement()
 		{
 			_movement = new SimpleMovement();
 			Vector2 initDirection = Random.insideUnitCircle.normalized;
-			float initSpeed = Random.Range(_currentLevel.MinSpeed, _currentLevel.MaxSpeed);
+			float initSpeed = Random.Range(_levelData.MinSpeed, _levelData.MaxSpeed);
 			_movement.Init(transform, initDirection, initSpeed);
+		}
+
+		public void Destroyed()
+		{
+			_onRockDestroy?.Invoke(_levelData, transform.position);
+			Destroy(gameObject);
 		}
 	}
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace Data
@@ -8,19 +7,12 @@ namespace Data
 	[Serializable]
 	public class RockData : ScriptableObject
 	{
-		[SerializeField] private List<RockLevelData> _levels;
-		public List<RockLevelData> Levels => _levels;
-	}
-
-	[Serializable]
-	public class RockLevelData
-	{
-		[SerializeField] private GameObject _prefab;
-		[SerializeField] private float _minSpeed;
-		[SerializeField] private float _maxSpeed;
-
-		public GameObject Prefab => _prefab;
-		public float MinSpeed => _minSpeed;
-		public float MaxSpeed => _maxSpeed;
+		[SerializeField] private int _startingRockCount;
+		[SerializeField] private int _howManyRocksAddPerLevel;
+		[SerializeField] private RockLevelData _firstRockLevelData;
+		
+		public int StartingRockCount => _startingRockCount;
+		public int HowManyRocksAddPerLevel => _howManyRocksAddPerLevel;
+		public RockLevelData FirstRockLevelData => _firstRockLevelData;
 	}
 }

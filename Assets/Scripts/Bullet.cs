@@ -1,17 +1,21 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System.Threading;
+using Cysharp.Threading.Tasks;
 using DefaultNamespace.Interfaces;
 using Managers.Interfaces;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour, IPoolObject
 {
-	//TODO: move to scriptable object
-	public float bulletSpeed = 40f;
+	//TODO: it should be moved to scriptable object as a data and pass in Init func
+	public float bulletSpeed = 50f;
 	public int bulletLifeTimeInMS;
 		
 	private IMovement _movement;
 	private IPoolManager<Bullet> _pool;
-		
+	private CancellationTokenSource _returnToPoolCancellationToken;
+
+	private bool _isHit; //safety if two destructible object overlaps. Then Destroy only one
+	
 	public void Init(Vector2 startPosition, Vector2 direction, IPoolManager<Bullet> pool)
 	{
 		_pool = pool;
@@ -30,7 +34,17 @@ public class Bullet : MonoBehaviour, IPoolObject
 
 	private void OnCollisionEnter2D(Collision2D other)
 	{
-		if (other.gameObject.TryGetComponent<IDestructible>(out var hitObject))
+		TryHit(other.gameObject);
+	}
+
+	private void OnTriggerEnter2D(Collider2D other)
+	{
+		TryHit(other.gameObject);
+	}
+
+	private void TryHit(GameObject other)
+	{
+		if (!_isHit && other.gameObject.TryGetComponent<IDestructible>(out var hitObject))
 		{
 			Hit(hitObject);
 		}
@@ -38,13 +52,15 @@ public class Bullet : MonoBehaviour, IPoolObject
 	
 	private void Hit(IDestructible other)
 	{
+		_isHit = true;
+		ReturnToPool();
 		other.Destroyed();
 	}
 
 	private async UniTaskVoid CountLifeTime()
 	{
-		gameObject.GetCancellationTokenOnDestroy();
-		await UniTask.Delay(bulletLifeTimeInMS);
+		_returnToPoolCancellationToken = new CancellationTokenSource();
+		await UniTask.Delay(bulletLifeTimeInMS, cancellationToken: _returnToPoolCancellationToken.Token);
 		ReturnToPool();
 	}
 	
@@ -56,11 +72,13 @@ public class Bullet : MonoBehaviour, IPoolObject
 
 	private void ReturnToPool()
 	{
+		_returnToPoolCancellationToken?.Cancel();
 		_pool.ReleaseObject(this);
 	}
 	
 	public void AfterGet()
 	{
+		_isHit = false;
 		gameObject.SetActive(true);
 	}
 

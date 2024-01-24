@@ -339,7 +339,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 20.916492, y: 11.638, z: 1}
+  m_LocalScale: {x: 37.80865, y: 21.036848, z: 1.8076}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1565861099}
@@ -457,7 +457,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 10
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -519,6 +519,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _baseGameData: {fileID: 11400000, guid: 5c41ae4bc8acf124c8830941a1f3b535, type: 2}
   _playerData: {fileID: 11400000, guid: f2939babb842462448f093ce244dab31, type: 2}
+  rockData: {fileID: 11400000, guid: 8d02f46d567ae0b48bcc083010cb68c3, type: 2}
   _mainWindow: {fileID: 174422728}
 --- !u!4 &584414833
 Transform:
@@ -1189,7 +1190,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1126827564847011964, guid: 469d75d201f05a94fbb886c548ef7012, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.3
+      value: 21.56
       objectReference: {fileID: 0}
     - target: {fileID: 1126827564847011964, guid: 469d75d201f05a94fbb886c548ef7012, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1231,6 +1232,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: RockLevel_1
       objectReference: {fileID: 0}
+    - target: {fileID: 1356133988232108887, guid: 469d75d201f05a94fbb886c548ef7012, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1258,7 +1263,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6999853405135195399, guid: 29ab9a35e0fcb204c84a66a317c196cb, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -15.88
+      value: -23.63
       objectReference: {fileID: 0}
     - target: {fileID: 6999853405135195399, guid: 29ab9a35e0fcb204c84a66a317c196cb, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1311,7 +1316,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 421733293502096954, guid: 584d6ebfd69a6f24f85e691dc641c289, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.3
+      value: 21.75
       objectReference: {fileID: 0}
     - target: {fileID: 421733293502096954, guid: 584d6ebfd69a6f24f85e691dc641c289, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1353,6 +1358,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: RockLevel_3
       objectReference: {fileID: 0}
+    - target: {fileID: 1776937424453002513, guid: 584d6ebfd69a6f24f85e691dc641c289, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1370,9 +1379,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: RockLevel_2
       objectReference: {fileID: 0}
+    - target: {fileID: 25805767954934672, guid: 6e6622435c3908448940439fc2fd4d63, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2101229581714827451, guid: 6e6622435c3908448940439fc2fd4d63, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 5.3
+      value: 21.75
       objectReference: {fileID: 0}
     - target: {fileID: 2101229581714827451, guid: 6e6622435c3908448940439fc2fd4d63, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1427,9 +1440,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Bullet
       objectReference: {fileID: 0}
+    - target: {fileID: 148319036939397869, guid: ded55e5d30fd44246a5bb9259691a872, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 510946938161212299, guid: ded55e5d30fd44246a5bb9259691a872, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -14.58
+      value: -20.34
       objectReference: {fileID: 0}
     - target: {fileID: 510946938161212299, guid: ded55e5d30fd44246a5bb9259691a872, type: 3}
       propertyPath: m_LocalPosition.y

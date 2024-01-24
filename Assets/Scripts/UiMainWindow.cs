@@ -1,4 +1,5 @@
-﻿using Cysharp.Threading.Tasks;
+﻿using System;
+using Cysharp.Threading.Tasks;
 using Managers.Interfaces;
 using TMPro;
 using UnityEngine;
@@ -22,8 +23,8 @@ namespace DefaultNamespace
 		
 		private async UniTaskVoid WaitForStart()
 		{
-			var cToken = gameObject.GetCancellationTokenOnDestroy();
-			await UniTask.WaitUntil( () => Input.GetKeyDown(KeyCode.Space), cancellationToken: cToken);
+			var ct = gameObject.GetCancellationTokenOnDestroy();
+			await UniTask.WaitUntil( () => Input.GetKeyDown(KeyCode.Space), cancellationToken: ct);
 			StartGame();
 		}
 		
@@ -34,7 +35,15 @@ namespace DefaultNamespace
 			_uiManager.IdleAction += IdleGame;
 			_uiManager.StartGameAction += GameStarted;
 		}
-		
+
+		private void OnDestroy() 
+		{
+			_uiManager.UpdatePointsAction -= UpdatePoints;
+			_uiManager.UpdateLivesAction -= UpdateLives;
+			_uiManager.IdleAction -= IdleGame;
+			_uiManager.StartGameAction -= GameStarted;
+		}
+
 		private void UpdatePoints(int currentPoints)
 		{
 			_pointsText.text = $"Points: {currentPoints}";
