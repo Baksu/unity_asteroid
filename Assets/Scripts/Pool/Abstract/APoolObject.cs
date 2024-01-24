@@ -6,7 +6,7 @@ using UnityEngine.Pool;
 namespace Managers.Abstracts
 {
 	//We also can use this for rocks
-	public abstract class APoolManager<T> : MonoBehaviour, IPoolManager<T> where T : class, IPoolObject
+	public abstract class APoolObject<T> : MonoBehaviour, IPoolManager<T> where T : class, IPoolObject
 	{
 		private IObjectPool<T> _pool;
 

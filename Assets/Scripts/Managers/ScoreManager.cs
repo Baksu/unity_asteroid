@@ -6,24 +6,25 @@ namespace Managers
 {
 	public class ScoreManager : IScoreManager, IDisposable
 	{
-		private readonly IUIManager _uiManager;
+		public event Action<int> OnPointsUpdate;
+		
 		private readonly IRocksManager _rocksManager;
 
 		private int _currentScore;
-
+		public int GetScore() => _currentScore;
+		
 		private int CurrentScore
 		{
 			get => _currentScore;
 			set
 			{
 				_currentScore = value;
-				_uiManager.UpdatePoints(_currentScore);
+				OnPointsUpdate?.Invoke(_currentScore);
 			}
 		}
 		
-		public ScoreManager(IUIManager uiManager, IRocksManager rocksManager)
+		public ScoreManager(IRocksManager rocksManager)
 		{
-			_uiManager = uiManager;
 			_rocksManager = rocksManager;
 			_rocksManager.OnRockDestroyed += OnRockDestroyed;
 		}

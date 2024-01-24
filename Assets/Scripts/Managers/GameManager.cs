@@ -6,8 +6,10 @@ namespace Managers
 {
 	public class GameManager : IGameManager, IDisposable
 	{
+		public event Action<int> OnLiveChangedAction;
+		public event Action OnGameOver;
+		
 		private readonly BaseGameData _gameData;
-		private readonly IUIManager _uiManager;
 		private readonly IPlayerManager _playerManager;
 		private readonly IRocksManager _rocksManager;
 		private readonly IScoreManager _scoreManager;
@@ -21,37 +23,32 @@ namespace Managers
 			set
 			{
 				_currentLives = value;
-				_uiManager.UpdateLives(_currentLives);
+				OnLiveChangedAction?.Invoke(_currentLives);
 			}
 		}
 
 		public GameManager(BaseGameData gameData,
 			IPlayerManager playerManager,
-			IUIManager uiManager,
 			IRocksManager rocksManager,
 			IScoreManager scoreManager)
 		{
 			_gameData = gameData;
-			_uiManager = uiManager;
 			_playerManager = playerManager;
 			_rocksManager = rocksManager;
 			_scoreManager = scoreManager;
-
-			_uiManager.OnStartGameAction += StartGame;
+			
 			_playerManager.OnPlayerDestroyedAction += OnPlayerDestroyed;
 			_rocksManager.OnRocksEndsAction += NextLevel;
 		}
 		
 		public void Dispose()
 		{
-			_uiManager.OnStartGameAction -= StartGame;
 			_playerManager.OnPlayerDestroyedAction -= OnPlayerDestroyed;
 			_rocksManager.OnRocksEndsAction -= NextLevel;
 		}
-		
+
 		public void Idle()
 		{
-			_uiManager.Idle();
 			ResetGameState();
 		}
 
@@ -60,6 +57,7 @@ namespace Managers
 			_currentLevel = 0;
 			CurrentLives = _gameData.StartLives;
 			_scoreManager.ResetGameState();
+			_rocksManager.ResetGameState();
 		}
 		
 		public void StartGame()
@@ -87,7 +85,7 @@ namespace Managers
 
 		private void GameOver()
 		{
-			
+			OnGameOver?.Invoke();
 		}
 	}
 }

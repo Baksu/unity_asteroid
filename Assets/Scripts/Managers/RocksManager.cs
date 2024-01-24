@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Data;
 using Enemies;
 using Managers.Interfaces;
@@ -15,8 +16,8 @@ namespace Managers
 		
 		private readonly RockData _rockData;
 		private readonly Camera _mainCamera;
-
-		private int _allRocksOnLevel;
+		
+		private List<Rock> _rocksOnLevel = new ();
 		
 		public RocksManager(RockData rockData)
 		{
@@ -37,37 +38,51 @@ namespace Managers
 			}
 		}
 
+		public void ResetGameState()
+		{
+			DestroyOtherRocks();
+		}
+
+		private void DestroyOtherRocks()
+		{
+			foreach (var rock in _rocksOnLevel)
+			{
+				rock.Clear();
+			}
+			_rocksOnLevel.Clear();
+		}
+
 		private void SpawnRock(RockLevelData levelData, Vector2 spawnPosition)
 		{
 			var rock = Object.Instantiate(levelData.Prefab, spawnPosition, Quaternion.identity).GetComponent<Rock>();
 			if (rock != null)
 			{
 				rock.Init(levelData, OnRockDestroy);
-				_allRocksOnLevel++;
+				_rocksOnLevel.Add(rock);
 			}
 		}
 
-		private void OnRockDestroy(RockLevelData levelData, Vector2 prevRockPosition)
+		private void OnRockDestroy(Rock rock, Vector2 prevRockPosition)
 		{
-			OnRockDestroyed?.Invoke(levelData);
-			_allRocksOnLevel--;
-
+			OnRockDestroyed?.Invoke(rock.LevelData);
+			_rocksOnLevel.Remove(rock);
+			
 			TryFinishLevel();
 			
-			if (levelData.NextLevel == null)
+			if (rock.LevelData.NextLevel == null)
 			{
 				return;
 			}
 			
 			for (int i = 0; i < 2; i++)
 			{
-				SpawnRock(levelData.NextLevel, prevRockPosition);
+				SpawnRock(rock.LevelData.NextLevel, prevRockPosition);
 			}
 		}
 
 		private void TryFinishLevel()
 		{
-			if (_allRocksOnLevel <= 0)
+			if (_rocksOnLevel.Count <= 0)
 			{
 				OnRocksEndsAction?.Invoke();
 			}

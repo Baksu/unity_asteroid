@@ -4,7 +4,7 @@ using UnityEngine.Pool;
 
 namespace Managers
 {
-	public class BulletsPool : APoolManager<Bullet>
+	public class BulletsPool : APoolObject<Bullet>
 	{
 		private IObjectPool<Bullet> _bulletsPool;
 

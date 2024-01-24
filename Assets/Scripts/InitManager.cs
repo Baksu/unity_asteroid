@@ -30,9 +30,6 @@ public class InitManager : MonoBehaviour
 
     private void CreateManagers() //TODO: Here I'm using simple injection because it's small project but it can be done by some plugin like zenject
     {
-        var uiManager = new UIManager();
-        _mainWindow.Init(uiManager);
-
         //we can avoid creating here game object and have init class for managers. We need to create spawnManager or something like this
         var bulletsPool = new GameObject("Bullets Manager").AddComponent<BulletsPool>();
         bulletsPool.Init(_baseGameData.BaseBullet);
@@ -41,9 +38,11 @@ public class InitManager : MonoBehaviour
         playerManager.Init(_playerData, bulletsPool);
 
         var rocksManager = new RocksManager(rockData);
-        var scoreManager = new ScoreManager(uiManager, rocksManager);
+        var scoreManager = new ScoreManager(rocksManager);
         
-        _gameManager = new GameManager(_baseGameData, playerManager, uiManager, rocksManager, scoreManager);
+        _gameManager = new GameManager(_baseGameData, playerManager, rocksManager, scoreManager);
+        
+        _mainWindow.Init(scoreManager, _gameManager);
     }
 
     private void EndLoad()

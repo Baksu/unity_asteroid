@@ -9,9 +9,11 @@ namespace Enemies
 {
 	public class Rock : MonoBehaviour, IObstacle, IDestructible
 	{
+		public RockLevelData LevelData => _levelData;
+		
 		private IMovement _movement;
 		private RockLevelData _levelData;
-		private Action<RockLevelData, Vector2> _onRockDestroy;
+		private Action<Rock, Vector2> _onRockDestroy;
 		
 		private void FixedUpdate()
 		{
@@ -21,7 +23,7 @@ namespace Enemies
 			}
 		}
 
-		public void Init(RockLevelData levelData, Action<RockLevelData, Vector2> onRockDestroy)
+		public void Init(RockLevelData levelData, Action<Rock, Vector2> onRockDestroy)
 		{
 			_levelData = levelData;
 			_onRockDestroy = onRockDestroy;
@@ -38,7 +40,12 @@ namespace Enemies
 
 		public void Destroyed()
 		{
-			_onRockDestroy?.Invoke(_levelData, transform.position);
+			_onRockDestroy?.Invoke(this, transform.position);
+			Clear();
+		}
+
+		public void Clear()
+		{
 			Destroy(gameObject);
 		}
 	}

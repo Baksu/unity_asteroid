@@ -8,70 +8,76 @@ namespace DefaultNamespace
 {
 	public class UiMainWindow : MonoBehaviour
 	{
-		[SerializeField] private GameObject _startText;
+		[SerializeField] private GameObject _clickSpaceGo;
 		[SerializeField] private TextMeshProUGUI _pointsText;
-		[SerializeField] private TextMeshProUGUI _lives;
+		[SerializeField] private TextMeshProUGUI _livesText;
 
-		private IUIManager _uiManager;
-		private bool _isGameStarted;
+		[SerializeField] private GameObject _gameOverGo;
+		[SerializeField] private TextMeshProUGUI _scoreText;
 		
-		public void Init(IUIManager uiManager)
+		private IScoreManager _scoreManager;
+		private IGameManager _gameManager;
+		
+		public void Init(IScoreManager scoreManager, IGameManager gameManager)
 		{
-			_uiManager = uiManager;
+			_scoreManager = scoreManager;
+			_gameManager = gameManager;
 			SetListeners();
+
+			IdleGame();
 		}
 		
-		private async UniTaskVoid WaitForStart()
+		private async UniTaskVoid WaitForSpaceDown(Action action)
 		{
 			var ct = gameObject.GetCancellationTokenOnDestroy();
 			await UniTask.WaitUntil( () => Input.GetKeyDown(KeyCode.Space), cancellationToken: ct);
-			StartGame();
+			action?.Invoke();
 		}
 		
 		private void SetListeners()
 		{
-			_uiManager.UpdatePointsAction += UpdatePoints;
-			_uiManager.UpdateLivesAction += UpdateLives;
-			_uiManager.IdleAction += IdleGame;
-			_uiManager.OnStartGameAction += GameStarted;
+			_scoreManager.OnPointsUpdate += UpdatePoints;
+			_gameManager.OnLiveChangedAction += UpdateLives;
+			_gameManager.OnGameOver += GameOver;
 		}
 
 		private void OnDestroy() 
 		{
-			_uiManager.UpdatePointsAction -= UpdatePoints;
-			_uiManager.UpdateLivesAction -= UpdateLives;
-			_uiManager.IdleAction -= IdleGame;
-			_uiManager.OnStartGameAction -= GameStarted;
+			_scoreManager.OnPointsUpdate -= UpdatePoints;
+			_gameManager.OnLiveChangedAction -= UpdateLives;
+			_gameManager.OnGameOver -= GameOver;
 		}
 
 		private void UpdatePoints(int currentPoints)
 		{
-			_pointsText.text = $"Points: {currentPoints}";
+			_pointsText.SetText($"Points: {currentPoints}");
 		}
 
 		private void UpdateLives(int currentLives)
 		{
-			_lives.text = $"Lives: {currentLives}";
+			_livesText.SetText($"Lives: {currentLives}");
 		}
 
 		private void IdleGame()
 		{
-			_startText.SetActive(true);
-			_isGameStarted = false;
-			
-			WaitForStart().Forget();
+			_gameManager.Idle();
+			_clickSpaceGo.SetActive(true);
+			_gameOverGo.SetActive(false);
+			WaitForSpaceDown(StartGame).Forget();
 		}
 		
 		private void StartGame()
 		{
-			_startText.SetActive(false);
-			
-			_uiManager.StartGame();
+			_clickSpaceGo.SetActive(false);
+			_gameManager.StartGame();
 		}
 
-		private void GameStarted()
+		private void GameOver()
 		{
-			_isGameStarted = true;
+			_gameOverGo.SetActive(true);
+			_clickSpaceGo.SetActive(true);
+			_scoreText.SetText($"YOUR SCORE : {_scoreManager.GetScore()}");
+			WaitForSpaceDown(IdleGame).Forget();
 		}
 	}
 }

@@ -9,5 +9,6 @@ namespace Managers.Interfaces
 		public event Action OnRocksEndsAction;
 		public void SpawnInitRock();
 		public void SpawnRocksForLevel(int level);
+		public void ResetGameState();
 	}
 }
