@@ -1,7 +1,8 @@
 using Data;
-using DefaultNamespace;
 using Managers;
 using Managers.Interfaces;
+using Pool;
+using UI;
 using UnityEngine;
 
 public class InitManager : MonoBehaviour
@@ -20,36 +21,22 @@ public class InitManager : MonoBehaviour
     }
 
     private void LoadGame(){
-        //TODO: turn on loader window no need here
-
         CreateManagers();
-        // init all data
-        
         EndLoad();
     }
 
     private void CreateManagers() //TODO: Here I'm using simple injection because it's small project but it can be done by some plugin like zenject
     {
-        //we can avoid creating here game object and have init class for managers. We need to create spawnManager or something like this
-        var bulletsPool = new GameObject("Bullets Manager").AddComponent<BulletsPool>();
-        bulletsPool.Init(_baseGameData.BaseBullet);
-
-        var playerManager = new GameObject("Player Manager").AddComponent<PlayerManager>();
-        playerManager.Init(_playerData, bulletsPool);
-
+        var bulletsPool = new BulletsPool(_baseGameData.BaseBullet);
+        var playerManager = new PlayerManager(_playerData, bulletsPool); 
         var rocksManager = new RocksManager(rockData);
         var scoreManager = new ScoreManager(rocksManager);
-        
         _gameManager = new GameManager(_baseGameData, playerManager, rocksManager, scoreManager);
-        
         _mainWindow.Init(scoreManager, _gameManager);
     }
 
     private void EndLoad()
     {
-        //TODO turn off loader window
         _gameManager.Idle();
     }
-    
-    
 }

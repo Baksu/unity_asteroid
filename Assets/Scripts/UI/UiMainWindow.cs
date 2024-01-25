@@ -4,7 +4,7 @@ using Managers.Interfaces;
 using TMPro;
 using UnityEngine;
 
-namespace DefaultNamespace
+namespace UI
 {
 	public class UiMainWindow : MonoBehaviour
 	{

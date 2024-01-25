@@ -17,7 +17,7 @@ namespace Managers
 		private readonly RockData _rockData;
 		private readonly Camera _mainCamera;
 		
-		private List<Rock> _rocksOnLevel = new ();
+		private readonly List<Rock> _rocksOnLevel = new ();
 		
 		public RocksManager(RockData rockData)
 		{

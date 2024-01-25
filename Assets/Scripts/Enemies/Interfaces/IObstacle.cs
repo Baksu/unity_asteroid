@@ -1,4 +1,4 @@
-﻿namespace Interfaces
+﻿namespace Enemies.Interfaces
 {
 	public interface IObstacle
 	{

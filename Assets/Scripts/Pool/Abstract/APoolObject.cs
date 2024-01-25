@@ -1,12 +1,10 @@
-﻿using DefaultNamespace.Interfaces;
-using Managers.Interfaces;
-using UnityEngine;
+﻿using Pool.Interfaces;
 using UnityEngine.Pool;
 
-namespace Managers.Abstracts
+namespace Pool.Abstract
 {
-	//We also can use this for rocks
-	public abstract class APoolObject<T> : MonoBehaviour, IPoolManager<T> where T : class, IPoolObject
+	//TODO: We also can use this for rocks
+	public abstract class APoolObject<T> : IPoolManager<T> where T : class, IPoolObject
 	{
 		private IObjectPool<T> _pool;
 

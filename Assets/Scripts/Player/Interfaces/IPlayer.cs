@@ -1,8 +1,8 @@
 ﻿using System;
 using Data;
-using Managers.Interfaces;
+using Pool.Interfaces;
 
-namespace Player.Interface
+namespace Player.Interfaces
 {
 	public interface IPlayer
 	{

@@ -1,19 +1,22 @@
 ﻿using System;
 using Data;
 using Managers.Interfaces;
-using Player.Interface;
+using Player;
+using Player.Interfaces;
+using Pool.Interfaces;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Managers
 {
-	public class PlayerManager : MonoBehaviour, IPlayerManager
+	public class PlayerManager : IPlayerManager
 	{
 		public event Action OnPlayerDestroyedAction;
 		
-		private IPoolManager<Bullet> _bulletsPool;
-		private PlayerData _playerData;
+		private readonly IPoolManager<Bullet> _bulletsPool;
+		private readonly PlayerData _playerData;
 		
-		public void Init(PlayerData playerData, IPoolManager<Bullet>  bulletsPool)
+		public PlayerManager(PlayerData playerData, IPoolManager<Bullet>  bulletsPool)
 		{
 			_bulletsPool = bulletsPool;
 			_playerData = playerData;
@@ -21,13 +24,13 @@ namespace Managers
 
 		public void SpawnPlayer()
 		{
-			if (Instantiate(_playerData.PlayerShipPrefab, Vector2.zero, Quaternion.identity).TryGetComponent(out IPlayer player))
+			if (Object.Instantiate(_playerData.PlayerShipPrefab, Vector2.zero, Quaternion.identity).TryGetComponent(out IPlayer player))
 			{
 				player.Init(_playerData, _bulletsPool, OnPlayerDestroyed);
 			}
 		}
 
-		public void OnPlayerDestroyed()
+		private void OnPlayerDestroyed()
 		{
 			OnPlayerDestroyedAction?.Invoke();
 		}

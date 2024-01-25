@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: RockLevel_2
-  m_EditorClassIdentifier: Assembly-CSharp:Data:RockLevelData
+  m_Script: {fileID: 11500000, guid: de311e29e3c248fcb1262f7e3340c21f, type: 3}
+  m_Name: RockLevel2
+  m_EditorClassIdentifier: 
   _prefab: {fileID: 1776937424453002513, guid: 584d6ebfd69a6f24f85e691dc641c289, type: 3}
   _minSpeed: 10
-  _maxSpeed: 12
+  _maxSpeed: 15
   _nextLevel: {fileID: 0}
   _pointsForDestroy: 70

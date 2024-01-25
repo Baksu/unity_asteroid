@@ -1,9 +1,9 @@
 using System;
 using Cysharp.Threading.Tasks;
 using Data;
-using Interfaces;
-using Managers.Interfaces;
-using Player.Interface;
+using Enemies.Interfaces;
+using Player.Interfaces;
+using Pool.Interfaces;
 using UnityEngine;
 
 namespace Player
@@ -33,9 +33,10 @@ namespace Player
         
         private async UniTaskVoid ShortIndestructible()
         {
+            var ct = gameObject.GetCancellationTokenOnDestroy();
             _collider.enabled = false;
             _spriteRenderer.color = _indestructibleColor;
-            await UniTask.Delay(_playerData.IndestructibleAfterSpawnInMS);
+            await UniTask.Delay(_playerData.IndestructibleAfterSpawnInMS, cancellationToken: ct);
             _spriteRenderer.color = _destructibleColor;
             _collider.enabled = true;
         }
@@ -68,11 +69,6 @@ namespace Player
             Friction();
         }
 
-        private void OnDestroy()
-        {
-            _onPlayerDestroyed?.Invoke();
-        }
-
         private void OnTriggerEnter2D(Collider2D other)
         {
             TryHit(other.gameObject);
@@ -89,6 +85,7 @@ namespace Player
             {
                 _isHit = true;
                 hitObject.Destroyed();
+                _onPlayerDestroyed?.Invoke();
                 Destroy(gameObject);
             }
         }

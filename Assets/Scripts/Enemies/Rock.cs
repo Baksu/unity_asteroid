@@ -1,7 +1,9 @@
 ﻿using System;
 using Data;
-using DefaultNamespace.Interfaces;
+using Enemies.Interfaces;
 using Interfaces;
+using Movement;
+using Movement.Interfaces;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -17,10 +19,7 @@ namespace Enemies
 		
 		private void FixedUpdate()
 		{
-			if (_movement != null)
-			{
-				_movement.Move();
-			}
+			_movement?.Move();
 		}
 
 		public void Init(RockLevelData levelData, Action<Rock, Vector2> onRockDestroy)
@@ -33,8 +32,8 @@ namespace Enemies
 		private void SetMovement()
 		{
 			_movement = new SimpleMovement();
-			Vector2 initDirection = Random.insideUnitCircle.normalized;
-			float initSpeed = Random.Range(_levelData.MinSpeed, _levelData.MaxSpeed);
+			var initDirection = Random.insideUnitCircle.normalized;
+			var initSpeed = Random.Range(_levelData.MinSpeed, _levelData.MaxSpeed);
 			_movement.Init(transform, initDirection, initSpeed);
 		}
 

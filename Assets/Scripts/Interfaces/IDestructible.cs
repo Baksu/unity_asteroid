@@ -1,4 +1,4 @@
-﻿namespace DefaultNamespace.Interfaces
+﻿namespace Interfaces
 {
 	public interface IDestructible
 	{

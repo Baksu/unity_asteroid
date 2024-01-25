@@ -1,23 +1,24 @@
-﻿using Managers.Abstracts;
+﻿using Player;
+using Pool.Abstract;
 using UnityEngine;
 using UnityEngine.Pool;
 
-namespace Managers
+namespace Pool
 {
 	public class BulletsPool : APoolObject<Bullet>
 	{
 		private IObjectPool<Bullet> _bulletsPool;
 
-		private GameObject _bulletPrefab;
+		private readonly GameObject _bulletPrefab;
 		
-		public void Init(GameObject bulletPrefab)
+		public BulletsPool(GameObject bulletPrefab)
 		{
 			_bulletPrefab = bulletPrefab;
 		}
 		
 		protected override Bullet CreateObject()
 		{
-			return Instantiate(_bulletPrefab).GetComponent<Bullet>();
+			return Object.Instantiate(_bulletPrefab).GetComponent<Bullet>();
 		}
 	}
 }

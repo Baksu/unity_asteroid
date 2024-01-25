@@ -1,6 +1,5 @@
-﻿using DefaultNamespace.Interfaces;
-
-namespace Managers.Interfaces
+﻿
+namespace Pool.Interfaces
 {
 	public interface IPoolManager<T> where T : class, IPoolObject
 	{

@@ -1,5 +1,5 @@
 ﻿
-namespace DefaultNamespace.Interfaces
+namespace Pool.Interfaces
 {
 	public interface IPoolObject
 	{

@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace DefaultNamespace.Interfaces
+namespace Movement.Interfaces
 {
 	public interface IMovement
 	{
