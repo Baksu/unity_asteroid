@@ -1,4 +1,3 @@
-using Data;
 using Managers;
 using Managers.Interfaces;
 using Pool;
@@ -7,10 +6,7 @@ using UnityEngine;
 
 public class InitManager : MonoBehaviour
 {
-    //TODO: here should be a separate manager for all data. I didn't had time to do that but it would be done similar to other managers
-    [SerializeField] private BaseGameData _baseGameData;
-    [SerializeField] private PlayerData _playerData;
-    [SerializeField] private RockData rockData;
+    [SerializeField] private DataManager _dataManager;
     [SerializeField] private UiMainWindow _mainWindow;
 
     private IGameManager _gameManager;
@@ -25,13 +21,13 @@ public class InitManager : MonoBehaviour
         EndLoad();
     }
 
-    private void CreateManagers() //TODO: Here I'm using simple injection because it's small project but it can be done by some plugin like zenject
+    private void CreateManagers() //I'm using simple injection because it's small project but it can be done by some plugin like zenject
     {
-        var bulletsPool = new BulletsPool(_baseGameData.BaseBullet);
-        var playerManager = new PlayerManager(_playerData, bulletsPool); 
-        var rocksManager = new RocksManager(rockData);
+        var bulletsPool = new BulletsPool(_dataManager.BaseGameData.BaseBulletPrefab);
+        var playerManager = new PlayerManager(_dataManager, bulletsPool); 
+        var rocksManager = new RocksManager(_dataManager);
         var scoreManager = new ScoreManager(rocksManager);
-        _gameManager = new GameManager(_baseGameData, playerManager, rocksManager, scoreManager);
+        _gameManager = new GameManager(_dataManager, playerManager, rocksManager, scoreManager);
         _mainWindow.Init(scoreManager, _gameManager);
     }
 

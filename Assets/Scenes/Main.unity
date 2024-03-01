@@ -399,6 +399,53 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &469957151
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 469957153}
+  - component: {fileID: 469957152}
+  m_Layer: 0
+  m_Name: DataManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &469957152
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 469957151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e6d1306accc465881e3b5d4083c16c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _baseGameData: {fileID: 11400000, guid: 5c41ae4bc8acf124c8830941a1f3b535, type: 2}
+  _playerData: {fileID: 11400000, guid: f2939babb842462448f093ce244dab31, type: 2}
+  _rockData: {fileID: 11400000, guid: 8d02f46d567ae0b48bcc083010cb68c3, type: 2}
+--- !u!4 &469957153
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 469957151}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -4829.9463, y: 10940.856, z: 6.631002}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 584414833}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -520,9 +567,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e49dc4ea04f279b40b944e7a07202f93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _baseGameData: {fileID: 11400000, guid: 5c41ae4bc8acf124c8830941a1f3b535, type: 2}
-  _playerData: {fileID: 11400000, guid: f2939babb842462448f093ce244dab31, type: 2}
-  rockData: {fileID: 11400000, guid: 8d02f46d567ae0b48bcc083010cb68c3, type: 2}
+  _dataManager: {fileID: 469957152}
   _mainWindow: {fileID: 174422728}
 --- !u!4 &584414833
 Transform:
@@ -536,7 +581,8 @@ Transform:
   m_LocalPosition: {x: 6087.8433, y: -10312.032, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 469957153}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &844310394
@@ -1482,5 +1528,5 @@ SceneRoots:
   m_Roots:
   - {fileID: 519420032}
   - {fileID: 1565861099}
-  - {fileID: 584414833}
   - {fileID: 174422727}
+  - {fileID: 584414833}

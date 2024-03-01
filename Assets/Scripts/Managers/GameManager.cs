@@ -13,8 +13,8 @@ namespace Managers
 	{
 		public event EventHandler OnLiveChangedAction;
 		public event EventHandler OnGameOver;
-		
-		private readonly BaseGameData _gameData;
+
+		private readonly IDataManager _dataManager;
 		private readonly IPlayerManager _playerManager;
 		private readonly IRocksManager _rocksManager;
 		private readonly IScoreManager _scoreManager;
@@ -32,12 +32,12 @@ namespace Managers
 			}
 		}
 
-		public GameManager(BaseGameData gameData,
+		public GameManager(IDataManager dataManager,
 			IPlayerManager playerManager,
 			IRocksManager rocksManager,
 			IScoreManager scoreManager)
 		{
-			_gameData = gameData;
+			_dataManager = dataManager;
 			_playerManager = playerManager;
 			_rocksManager = rocksManager;
 			_scoreManager = scoreManager;
@@ -60,7 +60,7 @@ namespace Managers
 		private void ResetGameState()
 		{
 			_currentLevel = 0;
-			CurrentLives = _gameData.StartLives;
+			CurrentLives = _dataManager.BaseGameData.StartLives;
 			_scoreManager.ResetGameState();
 			_rocksManager.ResetGameState();
 		}

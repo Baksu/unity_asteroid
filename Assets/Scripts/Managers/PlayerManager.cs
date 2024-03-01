@@ -14,19 +14,19 @@ namespace Managers
 		public event EventHandler OnPlayerDestroyed;
 		
 		private readonly IPoolManager<Bullet> _bulletsPool;
-		private readonly PlayerData _playerData;
+		private readonly IDataManager _dataManager;
 		
-		public PlayerManager(PlayerData playerData, IPoolManager<Bullet>  bulletsPool)
+		public PlayerManager(IDataManager dataManager, IPoolManager<Bullet>  bulletsPool)
 		{
 			_bulletsPool = bulletsPool;
-			_playerData = playerData;
+			_dataManager = dataManager;
 		}
 
 		public void SpawnPlayer()
 		{
-			if (Object.Instantiate(_playerData.PlayerShipPrefab, Vector2.zero, Quaternion.identity).TryGetComponent(out IPlayer player))
+			if (Object.Instantiate(_dataManager.PlayerData.PlayerShipPrefab, Vector2.zero, Quaternion.identity).TryGetComponent(out IPlayer player))
 			{
-				player.Init(_playerData, _bulletsPool);
+				player.Init(_dataManager.PlayerData, _bulletsPool);
 				player.OnPlayerDestroyed += OnPlayerDestroyed;
 			}
 		}

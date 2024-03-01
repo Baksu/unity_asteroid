@@ -1,5 +1,5 @@
 ﻿using System;
-using Data;
+using Data.Interfaces;
 using Pool.Interfaces;
 
 namespace Player.Interfaces
@@ -7,6 +7,6 @@ namespace Player.Interfaces
 	public interface IPlayer
 	{
 		public event EventHandler OnPlayerDestroyed;
-		public void Init(PlayerData playerData, IPoolManager<Bullet> bulletsManager);
+		public void Init(IPlayerData playerData, IPoolManager<Bullet> bulletsManager);
 	}
 }

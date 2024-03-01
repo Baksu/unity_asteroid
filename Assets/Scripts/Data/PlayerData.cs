@@ -1,11 +1,12 @@
 ﻿using System;
+using Data.Interfaces;
 using UnityEngine;
 
 namespace Data
 {
 	[CreateAssetMenu(fileName = "New player data", menuName = "Data/Player", order = 1)]
 	[Serializable]
-	public class PlayerData : ScriptableObject
+	public class PlayerData : ScriptableObject, IPlayerData
 	{
 		[SerializeField] private GameObject _playerShipPrefab;
 		[SerializeField] private float _rotationSpeed = 5f;

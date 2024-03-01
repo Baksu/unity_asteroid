@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: BaseGameData
   m_EditorClassIdentifier: 
   _startLives: 3
-  _baseBullet: {fileID: 148319036939397869, guid: ded55e5d30fd44246a5bb9259691a872, type: 3}
+  _baseBulletPrefab: {fileID: 148319036939397869, guid: ded55e5d30fd44246a5bb9259691a872, type: 3}

@@ -1,5 +1,5 @@
 ﻿using System;
-using Data;
+using Data.Interfaces;
 using Enemies.Interfaces;
 using Interfaces;
 using Movement;
@@ -11,10 +11,10 @@ namespace Enemies
 {
 	public class Rock : MonoBehaviour, IObstacle, IDestructible
 	{
-		public RockLevelData LevelData => _levelData;
+		public IRockLevelData LevelData => _levelData;
 		
 		private IMovement _movement;
-		private RockLevelData _levelData;
+		private IRockLevelData _levelData;
 		private Action<Rock, Vector2> _onRockDestroy;
 		
 		private void FixedUpdate()
@@ -22,7 +22,7 @@ namespace Enemies
 			_movement?.Move();
 		}
 
-		public void Init(RockLevelData levelData, Action<Rock, Vector2> onRockDestroy)
+		public void Init(IRockLevelData levelData, Action<Rock, Vector2> onRockDestroy)
 		{
 			_levelData = levelData;
 			_onRockDestroy = onRockDestroy;

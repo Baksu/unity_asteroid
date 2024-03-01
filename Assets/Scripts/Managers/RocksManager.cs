@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Data;
+using Data.Interfaces;
 using Enemies;
 using Managers.Interfaces;
 using UnityEngine;
@@ -11,7 +11,7 @@ namespace Managers
 {
 	public class OnRockDestroyedEventArgs : EventArgs
 	{
-		public RockLevelData RockLevelData { get; set; }
+		public IRockLevelData RockLevelData { get; set; }
 	}
 	
 	public class RocksManager : IRocksManager
@@ -19,15 +19,15 @@ namespace Managers
 		public event EventHandler OnRockDestroyed;
 		public event EventHandler OnRocksEndsAction;		
 		
-		private readonly RockData _rockData;
+		private readonly IDataManager _dataManager;
 		private readonly Camera _mainCamera;
 		
 		private readonly List<Rock> _rocksOnLevel = new ();
 		
-		public RocksManager(RockData rockData)
+		public RocksManager(IDataManager dataManager)
 		{
 			_mainCamera = Camera.main;
-			_rockData = rockData;
+			_dataManager = dataManager;
 		}
 
 		public void SpawnInitRock()
@@ -37,9 +37,9 @@ namespace Managers
 
 		public void SpawnRocksForLevel(int level)
 		{
-			for (int i = 0; i < _rockData.StartingRockCount + _rockData.HowManyRocksAddPerLevel * level; i++)
+			for (int i = 0; i < _dataManager.RockData.StartingRockCount + _dataManager.RockData.HowManyRocksAddPerLevel * level; i++)
 			{
-				SpawnRock(_rockData.FirstRockLevelData, InitialSpawnPosition());
+				SpawnRock(_dataManager.RockData.FirstRockLevelData, InitialSpawnPosition());
 			}
 		}
 
@@ -57,7 +57,7 @@ namespace Managers
 			_rocksOnLevel.Clear();
 		}
 
-		private void SpawnRock(RockLevelData levelData, Vector2 spawnPosition)
+		private void SpawnRock(IRockLevelData levelData, Vector2 spawnPosition)
 		{
 			var rock = Object.Instantiate(levelData.Prefab, spawnPosition, Quaternion.identity).GetComponent<Rock>();
 			if (rock != null)

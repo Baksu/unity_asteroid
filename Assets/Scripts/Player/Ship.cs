@@ -1,6 +1,6 @@
 using System;
 using Cysharp.Threading.Tasks;
-using Data;
+using Data.Interfaces;
 using Enemies.Interfaces;
 using Player.Interfaces;
 using Pool.Interfaces;
@@ -20,11 +20,11 @@ namespace Player
         
         public event EventHandler OnPlayerDestroyed;
         
-        private PlayerData _playerData;
+        private IPlayerData _playerData;
         private IPoolManager<Bullet> _bulletsPool;
         private bool _isHit;
         
-        public void Init(PlayerData playerData, IPoolManager<Bullet> bulletsManager)
+        public void Init(IPlayerData playerData, IPoolManager<Bullet> bulletsManager)
         {
             _playerData = playerData;
             _bulletsPool = bulletsManager;
