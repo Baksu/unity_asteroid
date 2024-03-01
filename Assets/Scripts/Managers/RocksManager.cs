@@ -9,10 +9,15 @@ using Random = UnityEngine.Random;
 
 namespace Managers
 {
+	public class OnRockDestroyedEventArgs : EventArgs
+	{
+		public RockLevelData RockLevelData { get; set; }
+	}
+	
 	public class RocksManager : IRocksManager
 	{
-		public event Action<RockLevelData> OnRockDestroyed;
-		public event Action OnRocksEndsAction;		
+		public event EventHandler OnRockDestroyed;
+		public event EventHandler OnRocksEndsAction;		
 		
 		private readonly RockData _rockData;
 		private readonly Camera _mainCamera;
@@ -64,7 +69,7 @@ namespace Managers
 
 		private void OnRockDestroy(Rock rock, Vector2 prevRockPosition)
 		{
-			OnRockDestroyed?.Invoke(rock.LevelData);
+			OnRockDestroyed?.Invoke(this, new OnRockDestroyedEventArgs{ RockLevelData = rock.LevelData});
 			_rocksOnLevel.Remove(rock);
 			
 			TryFinishLevel();
@@ -84,7 +89,7 @@ namespace Managers
 		{
 			if (_rocksOnLevel.Count <= 0)
 			{
-				OnRocksEndsAction?.Invoke();
+				OnRocksEndsAction?.Invoke(this, EventArgs.Empty);
 			}
 		}
 

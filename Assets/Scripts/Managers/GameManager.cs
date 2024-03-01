@@ -4,10 +4,15 @@ using Managers.Interfaces;
 
 namespace Managers
 {
+	public class OnLiveChangedActionEventArgs : EventArgs
+	{
+		public int Lives { get; set; }
+	}
+	
 	public class GameManager : IGameManager, IDisposable
 	{
-		public event Action<int> OnLiveChangedAction;
-		public event Action OnGameOver;
+		public event EventHandler OnLiveChangedAction;
+		public event EventHandler OnGameOver;
 		
 		private readonly BaseGameData _gameData;
 		private readonly IPlayerManager _playerManager;
@@ -23,7 +28,7 @@ namespace Managers
 			set
 			{
 				_currentLives = value;
-				OnLiveChangedAction?.Invoke(_currentLives);
+				OnLiveChangedAction?.Invoke(this, new OnLiveChangedActionEventArgs{Lives = _currentLives});
 			}
 		}
 
@@ -37,13 +42,13 @@ namespace Managers
 			_rocksManager = rocksManager;
 			_scoreManager = scoreManager;
 			
-			_playerManager.OnPlayerDestroyedAction += OnPlayerDestroyed;
+			_playerManager.OnPlayerDestroyed += OnPlayerDestroyed;
 			_rocksManager.OnRocksEndsAction += NextLevel;
 		}
 		
 		public void Dispose()
 		{
-			_playerManager.OnPlayerDestroyedAction -= OnPlayerDestroyed;
+			_playerManager.OnPlayerDestroyed -= OnPlayerDestroyed;
 			_rocksManager.OnRocksEndsAction -= NextLevel;
 		}
 
@@ -66,13 +71,13 @@ namespace Managers
 			_rocksManager.SpawnInitRock();
 		}
 
-		private void NextLevel()
+		private void NextLevel(object sender, EventArgs eventArgs)
 		{
 			_currentLevel++;
 			_rocksManager.SpawnRocksForLevel(_currentLevel);
 		}
 
-		private void OnPlayerDestroyed()
+		private void OnPlayerDestroyed(object sender, EventArgs eventArgs)
 		{
 			CurrentLives--;
 			if (CurrentLives <= 0)
@@ -85,7 +90,7 @@ namespace Managers
 
 		private void GameOver()
 		{
-			OnGameOver?.Invoke();
+			OnGameOver?.Invoke(this, EventArgs.Empty);
 		}
 	}
 }

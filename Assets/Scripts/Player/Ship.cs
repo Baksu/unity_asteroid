@@ -18,16 +18,16 @@ namespace Player
         [SerializeField] private Color _indestructibleColor;
         [SerializeField] private Color _destructibleColor;
         
+        public event EventHandler OnPlayerDestroyed;
+        
         private PlayerData _playerData;
         private IPoolManager<Bullet> _bulletsPool;
-        private Action _onPlayerDestroyed;
         private bool _isHit;
         
-        public void Init(PlayerData playerData, IPoolManager<Bullet> bulletsManager, Action onPlayerDestroyed)
+        public void Init(PlayerData playerData, IPoolManager<Bullet> bulletsManager)
         {
             _playerData = playerData;
             _bulletsPool = bulletsManager;
-            _onPlayerDestroyed = onPlayerDestroyed;
             ShortIndestructible().Forget();
         }
         
@@ -85,7 +85,7 @@ namespace Player
             {
                 _isHit = true;
                 hitObject.Destroyed();
-                _onPlayerDestroyed?.Invoke();
+                OnPlayerDestroyed?.Invoke(this, EventArgs.Empty);
                 Destroy(gameObject);
             }
         }

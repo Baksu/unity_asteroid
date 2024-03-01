@@ -1,12 +1,11 @@
 ﻿using System;
-using Data;
 
 namespace Managers.Interfaces
 {
 	public interface IRocksManager
 	{
-		public event Action<RockLevelData> OnRockDestroyed;
-		public event Action OnRocksEndsAction;
+		public event EventHandler OnRockDestroyed;
+		public event EventHandler OnRocksEndsAction;
 		public void SpawnInitRock();
 		public void SpawnRocksForLevel(int level);
 		public void ResetGameState();

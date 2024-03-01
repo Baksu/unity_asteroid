@@ -1,12 +1,17 @@
 ﻿using System;
-using Data;
 using Managers.Interfaces;
+using UnityEngine;
 
 namespace Managers
 {
+	public class OnPointsUpdateArgs : EventArgs
+	{
+		public int Points { get; set; }
+	}
+	
 	public class ScoreManager : IScoreManager, IDisposable
 	{
-		public event Action<int> OnPointsUpdate;
+		public event EventHandler OnPointsUpdate;
 		
 		private readonly IRocksManager _rocksManager;
 
@@ -19,7 +24,7 @@ namespace Managers
 			set
 			{
 				_currentScore = value;
-				OnPointsUpdate?.Invoke(_currentScore);
+				OnPointsUpdate?.Invoke(this, new OnPointsUpdateArgs{ Points = _currentScore});
 			}
 		}
 		
@@ -34,9 +39,14 @@ namespace Managers
 			_rocksManager.OnRockDestroyed -= OnRockDestroyed;
 		}
 
-		private void OnRockDestroyed(RockLevelData rockLevelData)
+		private void OnRockDestroyed(object sender, EventArgs eventArgs)
 		{
-			CurrentScore += rockLevelData.PointsForDestroy;
+			if (eventArgs is not OnRockDestroyedEventArgs args)
+			{
+				Debug.LogError("Wrong event arguments passed");
+				return;
+			}
+			CurrentScore += args.RockLevelData.PointsForDestroy;
 		}
 
 		public void ResetGameState()

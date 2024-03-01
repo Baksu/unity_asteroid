@@ -11,7 +11,7 @@ namespace Managers
 {
 	public class PlayerManager : IPlayerManager
 	{
-		public event Action OnPlayerDestroyedAction;
+		public event EventHandler OnPlayerDestroyed;
 		
 		private readonly IPoolManager<Bullet> _bulletsPool;
 		private readonly PlayerData _playerData;
@@ -26,13 +26,9 @@ namespace Managers
 		{
 			if (Object.Instantiate(_playerData.PlayerShipPrefab, Vector2.zero, Quaternion.identity).TryGetComponent(out IPlayer player))
 			{
-				player.Init(_playerData, _bulletsPool, OnPlayerDestroyed);
+				player.Init(_playerData, _bulletsPool);
+				player.OnPlayerDestroyed += OnPlayerDestroyed;
 			}
-		}
-
-		private void OnPlayerDestroyed()
-		{
-			OnPlayerDestroyedAction?.Invoke();
 		}
 	}
 }

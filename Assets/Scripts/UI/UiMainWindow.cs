@@ -1,5 +1,6 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
+using Managers;
 using Managers.Interfaces;
 using TMPro;
 using UnityEngine;
@@ -48,14 +49,24 @@ namespace UI
 			_gameManager.OnGameOver -= GameOver;
 		}
 
-		private void UpdatePoints(int currentPoints)
+		private void UpdatePoints(object sender, EventArgs eventArgs)
 		{
-			_pointsText.SetText($"Points: {currentPoints}");
+			if (eventArgs is not OnPointsUpdateArgs args)
+			{
+				Debug.LogError("Wrong event arguments passed");
+				return;
+			}
+			_pointsText.SetText($"Points: {args.Points}");
 		}
 
-		private void UpdateLives(int currentLives)
+		private void UpdateLives(object sender, EventArgs eventArgs)
 		{
-			_livesText.SetText($"Lives: {currentLives}");
+			if (eventArgs is not OnLiveChangedActionEventArgs args)
+			{
+				Debug.LogError("Wrong event arguments passed");
+				return;
+			}
+			_livesText.SetText($"Lives: {args.Lives}");
 		}
 
 		private void IdleGame()
@@ -72,7 +83,7 @@ namespace UI
 			_gameManager.StartGame();
 		}
 
-		private void GameOver()
+		private void GameOver(object sender, EventArgs eventArgs)
 		{
 			_gameOverGo.SetActive(true);
 			_clickSpaceGo.SetActive(true);

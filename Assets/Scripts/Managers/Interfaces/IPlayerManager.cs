@@ -4,7 +4,7 @@ namespace Managers.Interfaces
 {
 	public interface IPlayerManager
 	{
-		public event Action OnPlayerDestroyedAction;
+		public event EventHandler OnPlayerDestroyed;
 		public void SpawnPlayer();
 	}
 }

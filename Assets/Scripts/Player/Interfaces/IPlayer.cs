@@ -6,6 +6,7 @@ namespace Player.Interfaces
 {
 	public interface IPlayer
 	{
-		public void Init(PlayerData playerData, IPoolManager<Bullet> bulletsManager, Action onPlayerDestroyed);
+		public event EventHandler OnPlayerDestroyed;
+		public void Init(PlayerData playerData, IPoolManager<Bullet> bulletsManager);
 	}
 }
