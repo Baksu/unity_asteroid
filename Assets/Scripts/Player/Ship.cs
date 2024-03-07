@@ -17,6 +17,8 @@ namespace Player
 
         [SerializeField] private Color _indestructibleColor;
         [SerializeField] private Color _destructibleColor;
+
+        [SerializeField] private InputController _input;
         
         public event EventHandler OnPlayerDestroyed;
         
@@ -28,6 +30,7 @@ namespace Player
         {
             _playerData = playerData;
             _bulletsPool = bulletsManager;
+            _input.Init(this);
             ShortIndestructible().Forget();
         }
         
@@ -41,31 +44,8 @@ namespace Player
             _collider.enabled = true;
         }
 
-        private void Update() 
-        {
-            if (Input.GetKeyDown(KeyCode.Space)) //TODO: add command design pattern for inputs. It helps when for example game has a settings when a player can change key configuration
-            {
-                Fire();
-            }
-        }
-
         private void FixedUpdate()
         {
-            if (Input.GetKey(KeyCode.RightArrow))
-            {
-                Rotate(true);
-            }
-
-            if (Input.GetKey(KeyCode.LeftArrow))
-            {
-                Rotate(false);
-            }
-
-            if (Input.GetKey(KeyCode.UpArrow))
-            {
-                Accelerate();
-            }
-            
             Friction();
         }
 
@@ -90,17 +70,6 @@ namespace Player
             }
         }
 
-        private void Rotate(bool rightDirection)
-        {
-            float direction = rightDirection ? -1 : 1;
-            _rig.rotation += direction * _playerData.RotationSpeed;
-        }
-
-        private void Accelerate()
-        {
-            _rig.AddForce(transform.up * _playerData.Thrust);
-        }
-
         private void Friction()
         {
             if (_rig.velocity.magnitude >= _playerData.MinimumVelocityToMove) //If ship is moving add friction
@@ -113,10 +82,20 @@ namespace Player
             }
         }
         
-        private void Fire()
+        public void Fire()
         {
             var bullet = _bulletsPool.GetObject();
             bullet.Init(_bulletSpawnPoint.position, transform.up, _bulletsPool);
+        }
+        
+        public void Rotate(float direction)
+        {
+            _rig.rotation += -direction * _playerData.RotationSpeed;
+        }
+
+        public void Accelerate()
+        {
+            _rig.AddForce(transform.up * _playerData.Thrust);
         }
     }
 }

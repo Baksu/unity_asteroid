@@ -128,6 +128,8 @@ GameObject:
   - component: {fileID: 2188859573807517329}
   - component: {fileID: 2034979458184547242}
   - component: {fileID: 1122193250938041781}
+  - component: {fileID: 7404099636631861686}
+  - component: {fileID: 2545122161825415805}
   m_Layer: 0
   m_Name: Ship
   m_TagString: Untagged
@@ -170,6 +172,7 @@ MonoBehaviour:
   _bulletSpawnPoint: {fileID: 4377582873692250774}
   _indestructibleColor: {r: 0.7358709, g: 1, b: 0.3915094, a: 0.5019608}
   _destructibleColor: {r: 1, g: 1, b: 1, a: 1}
+  _input: {fileID: 2545122161825415805}
 --- !u!50 &2188859573807517329
 Rigidbody2D:
   serializedVersion: 4
@@ -255,5 +258,59 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a656f52a31554854a9e57d5f20a2a9db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7404099636631861686
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5628920103726498032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 9c51aa99b78b7524793d1a7ab8c93dc3, type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: fc246368-7ae0-4c4c-aaf1-8ed3ff8bf53b
+    m_ActionName: Gameplay/Acceleration[/Keyboard/upArrow]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 5800c1a4-0f61-4a3e-a000-6a93edca2969
+    m_ActionName: Gameplay/Rotation[/Keyboard/leftArrow,/Keyboard/rightArrow]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: cf647e1f-a81e-4279-ab47-8ec3de645a6a
+    m_ActionName: Gameplay/Fire[/Keyboard/space]
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: Keyboard
+  m_DefaultActionMap: Gameplay
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
+--- !u!114 &2545122161825415805
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5628920103726498032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 55740ee1e80f45b9b51cce9e0c2a396d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

@@ -8,5 +8,9 @@ namespace Player.Interfaces
 	{
 		public event EventHandler OnPlayerDestroyed;
 		public void Init(IPlayerData playerData, IPoolManager<Bullet> bulletsManager);
+
+		public void Rotate(float direction);
+		public void Accelerate();
+		public void Fire();
 	}
 }
