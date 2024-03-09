@@ -50,11 +50,11 @@ namespace Managers
 			SpawnRocksForLevel(0);
 		}
 
-		public void SpawnRocksForLevel(int level)
+		public void SpawnRocksForLevel(int gameLevel)
 		{
-			for (int i = 0; i < _dataManager.RockData.StartingRockCount + _dataManager.RockData.HowManyRocksAddPerLevel * level; i++)
+			for (int i = 0; i < _dataManager.RockData.StartingRockCount + _dataManager.RockData.HowManyRocksAddPerLevel * gameLevel; i++)
 			{
-				SpawnRock(level, _dataManager.RockData.FirstRockLevelData, InitialSpawnPosition());
+				SpawnRock(0, _dataManager.RockData.FirstRockLevelData, InitialSpawnPosition());
 			}
 		}
 
@@ -72,13 +72,13 @@ namespace Managers
 			_rocksOnLevel.Clear();
 		}
 
-		private void SpawnRock(int level, IRockLevelData levelData, Vector2 spawnPosition)
+		private void SpawnRock(int rockLevel, IRockLevelData levelData, Vector2 spawnPosition)
 		{
-			var rock = _rocksPools[level].GetObject();
+			var rock = _rocksPools[rockLevel].GetObject();
 			rock.transform.position = spawnPosition;
 			if (rock != null)
 			{
-				rock.Init(level, levelData, OnRockDestroy);
+				rock.Init(rockLevel, levelData, OnRockDestroy);
 				_rocksOnLevel.Add(rock);
 			}
 		}

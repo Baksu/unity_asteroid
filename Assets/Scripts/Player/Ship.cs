@@ -4,6 +4,7 @@ using Data.Interfaces;
 using Enemies.Interfaces;
 using Player.Interfaces;
 using Pool.Interfaces;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Player
@@ -24,14 +25,14 @@ namespace Player
         
         private IPlayerData _playerData;
         private IPoolManager<Bullet> _bulletsPool;
-        private bool _isHit;
+        private bool _isSpawned;
         
         public void Init(IPlayerData playerData, IPoolManager<Bullet> bulletsManager)
         {
+            gameObject.SetActive(false);
             _playerData = playerData;
             _bulletsPool = bulletsManager;
             _input.Init(this);
-            ShortIndestructible().Forget();
         }
         
         private async UniTaskVoid ShortIndestructible()
@@ -61,13 +62,27 @@ namespace Player
 
         private void TryHit(GameObject other)
         {
-            if (!_isHit && other.gameObject.TryGetComponent<IObstacle>(out var hitObject))
+            if (_isSpawned && other.gameObject.TryGetComponent<IObstacle>(out var hitObject))
             {
-                _isHit = true;
                 hitObject.Destroyed();
-                OnPlayerDestroyed?.Invoke(this, EventArgs.Empty);
-                Destroy(gameObject);
+                DestroyShip();
             }
+        }
+
+        private void DestroyShip()
+        {
+            _isSpawned = false;
+            gameObject.SetActive(false);
+            OnPlayerDestroyed?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void SpawnShip()
+        {
+            gameObject.SetActive(true);
+            transform.position = Vector2.zero;
+            transform.rotation = Quaternion.identity;;
+            ShortIndestructible().Forget();
+            _isSpawned = true;
         }
 
         private void Friction()
@@ -76,10 +91,10 @@ namespace Player
             {
                 _rig.AddForce(-1 * _playerData.Friction * _rig.velocity);
             }
-            else if (_rig.velocity.magnitude > 0.0f)
-            {
-                _rig.velocity = Vector2.zero;
-            }
+            // else if (_rig.velocity.magnitude > 0.0f)
+            // {
+            //     _rig.velocity = Vector2.zero;
+            // }
         }
         
         public void Fire()

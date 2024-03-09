@@ -15,6 +15,8 @@ namespace Managers
 		
 		private readonly IPoolManager<Bullet> _bulletsPool;
 		private readonly IDataManager _dataManager;
+
+		private IPlayer _currentPlayer;
 		
 		public PlayerManager(IDataManager dataManager, IPoolManager<Bullet>  bulletsPool)
 		{
@@ -22,12 +24,20 @@ namespace Managers
 			_dataManager = dataManager;
 		}
 
+		public void CreatePlayer()
+		{
+			if (Object.Instantiate(_dataManager.PlayerData.PlayerShipPrefab, Vector2.zero, Quaternion.identity).TryGetComponent(out _currentPlayer))
+			{
+				_currentPlayer.Init(_dataManager.PlayerData, _bulletsPool);
+				_currentPlayer.OnPlayerDestroyed += OnPlayerDestroyed;
+			}
+		}
+
 		public void SpawnPlayer()
 		{
-			if (Object.Instantiate(_dataManager.PlayerData.PlayerShipPrefab, Vector2.zero, Quaternion.identity).TryGetComponent(out IPlayer player))
+			if (_currentPlayer != null)
 			{
-				player.Init(_dataManager.PlayerData, _bulletsPool);
-				player.OnPlayerDestroyed += OnPlayerDestroyed;
+				_currentPlayer.SpawnShip();
 			}
 		}
 	}

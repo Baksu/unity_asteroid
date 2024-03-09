@@ -44,6 +44,8 @@ namespace Managers
 			
 			_playerManager.OnPlayerDestroyed += OnPlayerDestroyed;
 			_rocksManager.OnRocksEndsAction += NextLevel;
+
+			_playerManager.CreatePlayer();
 		}
 		
 		public void Dispose()

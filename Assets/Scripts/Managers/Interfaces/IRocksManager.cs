@@ -7,7 +7,7 @@ namespace Managers.Interfaces
 		public event EventHandler OnRockDestroyed;
 		public event EventHandler OnRocksEndsAction;
 		public void SpawnInitRock();
-		public void SpawnRocksForLevel(int level);
+		public void SpawnRocksForLevel(int gameLevel);
 		public void ResetGameState();
 	}
 }
