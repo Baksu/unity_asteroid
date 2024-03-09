@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Data.Interfaces;
 using Enemies;
 using Managers.Interfaces;
+using Pool;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
@@ -23,11 +24,25 @@ namespace Managers
 		private readonly Camera _mainCamera;
 		
 		private readonly List<Rock> _rocksOnLevel = new ();
+
+		private List<RocksPool> _rocksPools = new ();
 		
 		public RocksManager(IDataManager dataManager)
 		{
 			_mainCamera = Camera.main;
 			_dataManager = dataManager;
+
+			CreateRocksPools();
+		}
+
+		private void CreateRocksPools()
+		{
+			var rockData = _dataManager.RockData.FirstRockLevelData;
+			while (rockData != null)
+			{
+				_rocksPools.Add(new RocksPool(rockData.Prefab));
+				rockData = rockData.NextLevel;
+			}
 		}
 
 		public void SpawnInitRock()
@@ -39,7 +54,7 @@ namespace Managers
 		{
 			for (int i = 0; i < _dataManager.RockData.StartingRockCount + _dataManager.RockData.HowManyRocksAddPerLevel * level; i++)
 			{
-				SpawnRock(_dataManager.RockData.FirstRockLevelData, InitialSpawnPosition());
+				SpawnRock(level, _dataManager.RockData.FirstRockLevelData, InitialSpawnPosition());
 			}
 		}
 
@@ -52,17 +67,18 @@ namespace Managers
 		{
 			foreach (var rock in _rocksOnLevel)
 			{
-				rock.Clear();
+				_rocksPools[rock.CurrentLevel].ReleaseObject(rock);
 			}
 			_rocksOnLevel.Clear();
 		}
 
-		private void SpawnRock(IRockLevelData levelData, Vector2 spawnPosition)
+		private void SpawnRock(int level, IRockLevelData levelData, Vector2 spawnPosition)
 		{
-			var rock = Object.Instantiate(levelData.Prefab, spawnPosition, Quaternion.identity).GetComponent<Rock>();
+			var rock = _rocksPools[level].GetObject();
+			rock.transform.position = spawnPosition;
 			if (rock != null)
 			{
-				rock.Init(levelData, OnRockDestroy);
+				rock.Init(level, levelData, OnRockDestroy);
 				_rocksOnLevel.Add(rock);
 			}
 		}
@@ -70,6 +86,7 @@ namespace Managers
 		private void OnRockDestroy(Rock rock, Vector2 prevRockPosition)
 		{
 			OnRockDestroyed?.Invoke(this, new OnRockDestroyedEventArgs{ RockLevelData = rock.LevelData});
+			_rocksPools[rock.CurrentLevel].ReleaseObject(rock);
 			_rocksOnLevel.Remove(rock);
 			
 			TryFinishLevel();
@@ -81,7 +98,7 @@ namespace Managers
 			
 			for (int i = 0; i < 2; i++)
 			{
-				SpawnRock(rock.LevelData.NextLevel, prevRockPosition);
+				SpawnRock(rock.CurrentLevel + 1, rock.LevelData.NextLevel, prevRockPosition);
 			}
 		}
 

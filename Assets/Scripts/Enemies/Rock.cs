@@ -4,17 +4,18 @@ using Enemies.Interfaces;
 using Interfaces;
 using Movement;
 using Movement.Interfaces;
+using Pool.Interfaces;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Enemies
 {
-	public class Rock : MonoBehaviour, IObstacle, IDestructible
+	public class Rock : MonoBehaviour, IObstacle, IDestructible, IPoolObject
 	{
-		public IRockLevelData LevelData => _levelData;
+		public IRockLevelData LevelData { get; private set; }
+		public int CurrentLevel { get; private set; }
 		
 		private IMovement _movement;
-		private IRockLevelData _levelData;
 		private Action<Rock, Vector2> _onRockDestroy;
 		
 		private void FixedUpdate()
@@ -22,9 +23,10 @@ namespace Enemies
 			_movement?.Move();
 		}
 
-		public void Init(IRockLevelData levelData, Action<Rock, Vector2> onRockDestroy)
+		public void Init(int currentLevel, IRockLevelData levelData, Action<Rock, Vector2> onRockDestroy)
 		{
-			_levelData = levelData;
+			CurrentLevel = currentLevel;
+			LevelData = levelData;
 			_onRockDestroy = onRockDestroy;
 			SetMovement();
 		}
@@ -33,19 +35,23 @@ namespace Enemies
 		{
 			_movement = new SimpleMovement();
 			var initDirection = Random.insideUnitCircle.normalized;
-			var initSpeed = Random.Range(_levelData.MinSpeed, _levelData.MaxSpeed);
+			var initSpeed = Random.Range(LevelData.MinSpeed, LevelData.MaxSpeed);
 			_movement.Init(transform, initDirection, initSpeed);
 		}
 
 		public void Destroyed()
 		{
 			_onRockDestroy?.Invoke(this, transform.position);
-			Clear();
 		}
 
-		public void Clear()
+		public void AfterGet()
 		{
-			Destroy(gameObject);
+			gameObject.SetActive(true);
+		}
+
+		public void BeforeRelease()
+		{
+			gameObject.SetActive(false);
 		}
 	}
 }

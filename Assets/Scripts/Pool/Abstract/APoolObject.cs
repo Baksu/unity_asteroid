@@ -3,7 +3,6 @@ using UnityEngine.Pool;
 
 namespace Pool.Abstract
 {
-	//TODO: We also can use this for rocks
 	public abstract class APoolObject<T> : IPoolManager<T> where T : class, IPoolObject
 	{
 		private IObjectPool<T> _pool;
