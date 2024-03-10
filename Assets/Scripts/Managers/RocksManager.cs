@@ -5,7 +5,6 @@ using Enemies;
 using Managers.Interfaces;
 using Pool;
 using UnityEngine;
-using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 namespace Managers
@@ -20,24 +19,23 @@ namespace Managers
 		public event EventHandler OnRockDestroyed;
 		public event EventHandler OnRocksEndsAction;		
 		
-		private readonly IDataManager _dataManager;
+		private readonly IRockData _rockData;
 		private readonly Camera _mainCamera;
 		
 		private readonly List<Rock> _rocksOnLevel = new ();
-
-		private List<RocksPool> _rocksPools = new ();
+		private readonly List<RocksPool> _rocksPools = new ();
 		
-		public RocksManager(IDataManager dataManager)
+		public RocksManager(IRockData rockData)
 		{
 			_mainCamera = Camera.main;
-			_dataManager = dataManager;
+			_rockData = rockData;
 
 			CreateRocksPools();
 		}
 
 		private void CreateRocksPools()
 		{
-			var rockData = _dataManager.RockData.FirstRockLevelData;
+			var rockData = _rockData.FirstRockLevelData;
 			while (rockData != null)
 			{
 				_rocksPools.Add(new RocksPool(rockData.Prefab));
@@ -52,9 +50,9 @@ namespace Managers
 
 		public void SpawnRocksForLevel(int gameLevel)
 		{
-			for (int i = 0; i < _dataManager.RockData.StartingRockCount + _dataManager.RockData.HowManyRocksAddPerLevel * gameLevel; i++)
+			for (int i = 0; i < _rockData.StartingRockCount + _rockData.HowManyRocksAddPerLevel * gameLevel; i++)
 			{
-				SpawnRock(0, _dataManager.RockData.FirstRockLevelData, InitialSpawnPosition());
+				SpawnRock(0, _rockData.FirstRockLevelData, InitialSpawnPosition());
 			}
 		}
 
@@ -96,7 +94,7 @@ namespace Managers
 				return;
 			}
 			
-			for (int i = 0; i < 2; i++)
+			for (int i = 0; i < _rockData.RockSpawnAfterDestroy; i++)
 			{
 				SpawnRock(rock.CurrentLevel + 1, rock.LevelData.NextLevel, prevRockPosition);
 			}

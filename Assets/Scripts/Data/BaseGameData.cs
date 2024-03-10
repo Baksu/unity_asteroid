@@ -9,9 +9,7 @@ namespace Data
 	public class BaseGameData : ScriptableObject, IBaseGameData
 	{
 		[SerializeField] private int _startLives;
-		[SerializeField] private GameObject _baseBulletPrefab;
 		
 		public int StartLives => _startLives;
-		public GameObject BaseBulletPrefab => _baseBulletPrefab;
 	}
 }

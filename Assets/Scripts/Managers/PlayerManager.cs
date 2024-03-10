@@ -1,5 +1,4 @@
 ﻿using System;
-using Data;
 using Managers.Interfaces;
 using Player;
 using Player.Interfaces;
@@ -28,17 +27,14 @@ namespace Managers
 		{
 			if (Object.Instantiate(_dataManager.PlayerData.PlayerShipPrefab, Vector2.zero, Quaternion.identity).TryGetComponent(out _currentPlayer))
 			{
-				_currentPlayer.Init(_dataManager.PlayerData, _bulletsPool);
+				_currentPlayer.Init(_dataManager.PlayerData, _bulletsPool, _dataManager);
 				_currentPlayer.OnPlayerDestroyed += OnPlayerDestroyed;
 			}
 		}
 
 		public void SpawnPlayer()
 		{
-			if (_currentPlayer != null)
-			{
-				_currentPlayer.SpawnShip();
-			}
+			_currentPlayer?.SpawnShip();
 		}
 	}
 }

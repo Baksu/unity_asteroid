@@ -9,10 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4af7c4a677ad47d0a2eaa5c04549574d, type: 3}
-  m_Name: BaseGameData
+  m_Script: {fileID: 11500000, guid: 46481f8aece94a98a39c8cce19fa546b, type: 3}
+  m_Name: BaseBulletData
   m_EditorClassIdentifier: 
-  _startLives: 3
   _baseBulletPrefab: {fileID: 148319036939397869, guid: ded55e5d30fd44246a5bb9259691a872, type: 3}
   _bulletSpeed: 20
   _bulletLifeTimeInMS: 1000

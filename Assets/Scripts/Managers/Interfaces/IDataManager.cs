@@ -6,6 +6,7 @@ namespace Managers.Interfaces
 	{
 		public IBaseGameData BaseGameData { get; }
 		public IPlayerData PlayerData { get; }
+		public IBulletData BulletData { get; }
 		public IRockData RockData { get; }
 	}
 }

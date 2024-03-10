@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using Cysharp.Threading.Tasks;
+using Data.Interfaces;
 using Interfaces;
 using Movement;
 using Movement.Interfaces;
@@ -10,19 +11,18 @@ namespace Player
 {
 	public class Bullet : MonoBehaviour, IPoolObject
 	{
-		//TODO: it should be moved to scriptable object as a data and pass in Init func
-		public float bulletSpeed = 50f;
-		public int bulletLifeTimeInMS;
-		
 		private IMovement _movement;
 		private IPoolManager<Bullet> _pool;
 		private CancellationTokenSource _returnToPoolCancellationToken;
 
 		private bool _isHit; //safety if two destructible object overlaps. Then Destroy only one
-	
-		public void Init(Vector2 startPosition, Vector2 direction, IPoolManager<Bullet> pool)
+
+		private IBulletData _bulletData;
+		
+		public void Init(Vector2 startPosition, Vector2 direction, IPoolManager<Bullet> pool, IBulletData bulletData)
 		{
 			_pool = pool;
+			_bulletData = bulletData;
 			transform.position = startPosition;
 			SetMovement(direction);
 			CountLifeTime().Forget();
@@ -64,14 +64,14 @@ namespace Player
 		private async UniTaskVoid CountLifeTime()
 		{
 			_returnToPoolCancellationToken = new CancellationTokenSource();
-			await UniTask.Delay(bulletLifeTimeInMS, cancellationToken: _returnToPoolCancellationToken.Token);
+			await UniTask.Delay(_bulletData.BulletLifeTimeInMS, cancellationToken: _returnToPoolCancellationToken.Token);
 			ReturnToPool();
 		}
 	
 		private void SetMovement(Vector2 direction)
 		{
 			_movement = new SimpleMovement();
-			_movement.Init(transform, direction, bulletSpeed);
+			_movement.Init(transform, direction, _bulletData.BulletSpeed);
 		}
 
 		private void ReturnToPool()

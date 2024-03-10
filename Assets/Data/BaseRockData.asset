@@ -13,5 +13,6 @@ MonoBehaviour:
   m_Name: BaseRockData
   m_EditorClassIdentifier: 
   _startingRockCount: 4
+  _rockSpawnAfterDestroy: 2
   _howManyRocksAddPerLevel: 2
   _firstRockLevelData: {fileID: 11400000, guid: 99ec3767f0acc404b89298bb5bd92a6f, type: 2}

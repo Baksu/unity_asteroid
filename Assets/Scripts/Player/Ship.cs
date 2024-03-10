@@ -2,9 +2,9 @@ using System;
 using Cysharp.Threading.Tasks;
 using Data.Interfaces;
 using Enemies.Interfaces;
+using Managers.Interfaces;
 using Player.Interfaces;
 using Pool.Interfaces;
-using Unity.Mathematics;
 using UnityEngine;
 
 namespace Player
@@ -25,13 +25,15 @@ namespace Player
         
         private IPlayerData _playerData;
         private IPoolManager<Bullet> _bulletsPool;
+        private IDataManager _dataManager;
         private bool _isSpawned;
         
-        public void Init(IPlayerData playerData, IPoolManager<Bullet> bulletsManager)
+        public void Init(IPlayerData playerData, IPoolManager<Bullet> bulletsPool, IDataManager dataManager)
         {
             gameObject.SetActive(false);
             _playerData = playerData;
-            _bulletsPool = bulletsManager;
+            _bulletsPool = bulletsPool;
+            _dataManager = dataManager;
             _input.Init(this);
         }
         
@@ -91,16 +93,12 @@ namespace Player
             {
                 _rig.AddForce(-1 * _playerData.Friction * _rig.velocity);
             }
-            // else if (_rig.velocity.magnitude > 0.0f)
-            // {
-            //     _rig.velocity = Vector2.zero;
-            // }
         }
         
         public void Fire()
         {
             var bullet = _bulletsPool.GetObject();
-            bullet.Init(_bulletSpawnPoint.position, transform.up, _bulletsPool);
+            bullet.Init(_bulletSpawnPoint.position, transform.up, _bulletsPool, _dataManager.BulletData);
         }
         
         public void Rotate(float direction)

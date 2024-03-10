@@ -430,6 +430,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _baseGameData: {fileID: 11400000, guid: 5c41ae4bc8acf124c8830941a1f3b535, type: 2}
   _playerData: {fileID: 11400000, guid: f2939babb842462448f093ce244dab31, type: 2}
+  _bulletData: {fileID: 11400000, guid: 503df0df4d6d9684381dff3dce8e5bf9, type: 2}
   _rockData: {fileID: 11400000, guid: 8d02f46d567ae0b48bcc083010cb68c3, type: 2}
 --- !u!4 &469957153
 Transform:
